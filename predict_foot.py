@@ -6,7 +6,7 @@ from tabulate import tabulate
 # Importer le dataset
 dataset = pd.read_csv('dataset.csv')
 
-#dataset = pd.read_csv('champ.csv')
+# Retire la première colonne, inutile
 dataset = dataset.iloc[:, 1:]
 
 # On change les colonnes des noms des équipes par des type Category
