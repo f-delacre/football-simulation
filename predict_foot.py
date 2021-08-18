@@ -100,15 +100,15 @@ regressor.fit(x_train, y_train)
 y_predict = regressor.predict(x_test)
 y_predict = np.round(y_predict)
 
-italie = {"Team": [11],
-          "Coach": [12],
-          "Formation": [8],
-          "Value": [411500000]}
+italie = {"Team": 11,
+          "Coach": 12,
+          "Formation": 8,
+          "Value": 411500000}
 
-angleterre = {"Team": [1],
-              "Coach": [21],
-              "Formation": [7],
-              "Value": [605000000]}
+angleterre = {"Team": 1,
+              "Coach": 21,
+              "Formation": 7,
+              "Value": 605000000}
 
 def PredictScore(equipe1, equipe2):
     match = pd.DataFrame({"Date": [2021],
@@ -123,7 +123,7 @@ def PredictScore(equipe1, equipe2):
     match = sc.transform(match)
     return np.round(regressor.predict(match))
 
-def PrintScore(score):
+def PrintScore(equipe1, equipe2, score):
     print(tabulate(
     [
      [score[0, 0], "Score", score[0, 11]],
@@ -138,8 +138,8 @@ def PrintScore(score):
      [score[0, 9], "Offside", score[0, 20]],
      [score[0, 10], "Corners", score[0, 21]],
     ],
-    headers=['Italy', "-", 'England'],
+    headers=[equipe1, "-", equipe2],
     colalign=("right","center","left")))
 
 match_score = PredictScore(italie, angleterre)
-PrintScore(match_score)
+PrintScore("Italie", "Angleterre", match_score)
