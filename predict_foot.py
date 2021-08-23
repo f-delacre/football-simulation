@@ -2,6 +2,7 @@
 import numpy as np
 import pandas as pd
 from tabulate import tabulate
+from sklearn.preprocessing import LabelEncoder
 
 # Importer le dataset
 dataset = pd.read_csv('dataset.csv')
@@ -9,43 +10,24 @@ dataset = pd.read_csv('dataset.csv')
 # Retire la première colonne, inutile
 dataset = dataset.iloc[:, 1:]
 
-# On change les colonnes des noms des équipes par des type Category
-dataset["Team 1"] = dataset["Team 1"].astype("category")
-dataset["Team 2"] = dataset["Team 2"].astype("category")
+def EncodeColumnsDataset(columnName1, columnName2):
+    # On change les colonnes des noms des équipes par des type Category
+    dataset[columnName1] = dataset[columnName1].astype("category")
+    dataset[columnName2] = dataset[columnName2].astype("category")
 
-dataset["Team 1 Coach"] = dataset["Team 1 Coach"].astype("category")
-dataset["Team 2 Coach"] = dataset["Team 2 Coach"].astype("category")
+    encoder = LabelEncoder()
+    coder = pd.concat([dataset[columnName1], dataset[columnName2]])
+    coder = coder.drop_duplicates()
+    coder = coder.sort_values(ignore_index=True)
+    encoder.fit(coder)
+    dataset[columnName1] = encoder.transform(dataset[columnName1])
+    dataset[columnName2] = encoder.transform(dataset[columnName2])
+    
+    return coder
 
-dataset["Team 1 Formation"] = dataset["Team 1 Formation"].astype("category")
-dataset["Team 2 Formation"] = dataset["Team 2 Formation"].astype("category")
-
-# Transformation des équipes en numéro
-from sklearn.preprocessing import LabelEncoder
-encoder = LabelEncoder()
-teams = pd.concat([dataset["Team 1"], dataset["Team 2"]])
-teams = teams.drop_duplicates()
-teams = teams.sort_values(ignore_index=True)
-encoder.fit(teams)
-dataset["Team 1"] = encoder.transform(dataset["Team 1"])
-dataset["Team 2"] = encoder.transform(dataset["Team 2"])
-
-# Transformation des coach en numéro
-encoder_coach = LabelEncoder()
-coachs = pd.concat([dataset["Team 1 Coach"], dataset["Team 2 Coach"]])
-coachs = coachs.drop_duplicates()
-coachs = coachs.sort_values(ignore_index=True)
-encoder_coach.fit(coachs)
-dataset["Team 1 Coach"] = encoder_coach.transform(dataset["Team 1 Coach"])
-dataset["Team 2 Coach"] = encoder_coach.transform(dataset["Team 2 Coach"])
-
-# Transformation des formations en numéro
-encoder_tactics = LabelEncoder()
-tactics = pd.concat([dataset["Team 1 Formation"], dataset["Team 2 Formation"]])
-tactics = tactics.drop_duplicates()
-tactics = tactics.sort_values(ignore_index=True)
-encoder_tactics.fit(tactics)
-dataset["Team 1 Formation"] = encoder_tactics.transform(dataset["Team 1 Formation"])
-dataset["Team 2 Formation"] = encoder_tactics.transform(dataset["Team 2 Formation"])
+teams = EncodeColumnsDataset("Team 1", "Team 2")
+coachs = EncodeColumnsDataset("Team 1 Coach", "Team 2 Coach")
+tactics = EncodeColumnsDataset("Team 1 Formation", "Team 2 Formation")
 
 # Diviser le dataset entre le Training set et le Test set
 from sklearn.model_selection import train_test_split
