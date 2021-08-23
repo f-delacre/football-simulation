@@ -15,6 +15,7 @@ def EncodeColumnsDataset(columnName1, columnName2):
     dataset[columnName1] = dataset[columnName1].astype("category")
     dataset[columnName2] = dataset[columnName2].astype("category")
 
+    # Transforme les colonnes choisies en nombre et les place dans une variable "coder"
     encoder = LabelEncoder()
     coder = pd.concat([dataset[columnName1], dataset[columnName2]])
     coder = coder.drop_duplicates()
