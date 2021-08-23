@@ -121,8 +121,8 @@ def PrintScore(equipe1, equipe2, score):
      [score[0, 9], "Offside", score[0, 20]],
      [score[0, 10], "Corners", score[0, 21]],
     ],
-    headers=[equipe1, "-", equipe2],
+    headers=[teams[equipe2["Team"]], "-", teams[equipe2["Team"]]],
     colalign=("right","center","left")))
 
 match_score = PredictScore(italie, angleterre)
-PrintScore("Italie", "Angleterre", match_score)
+PrintScore(italie, angleterre, match_score)
