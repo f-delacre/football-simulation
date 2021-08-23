@@ -83,14 +83,14 @@ regressor.fit(x_train, y_train)
 y_predict = regressor.predict(x_test)
 y_predict = np.round(y_predict)
 
-italie = {"Team": 11,
-          "Coach": 12,
-          "Formation": 8,
+italie = {"Team": teams[teams == "Italie"].index[0],
+          "Coach": coachs[coachs == "Mancini"].index[0],
+          "Formation": tactics[tactics == "4-3-3"].index[0],
           "Value": 411500000}
 
-angleterre = {"Team": 1,
-              "Coach": 21,
-              "Formation": 7,
+angleterre = {"Team": teams[teams == "Angleterre"].index[0],
+              "Coach": coachs[coachs == "Southgate"].index[0],
+              "Formation": tactics[tactics == "3-4-3"].index[0],
               "Value": 605000000}
 
 def PredictScore(equipe1, equipe2):
